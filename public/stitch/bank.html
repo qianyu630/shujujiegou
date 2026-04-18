@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="zh-CN"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>银行排队系统应用详情 - 数据结构可视化</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Space+Grotesk:wght@500;700;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-container-high": "#1b2028",
+                        "on-secondary": "#005e11",
+                        "on-tertiary-fixed": "#23004e",
+                        "on-surface-variant": "#a8abb3",
+                        "surface-container": "#151a21",
+                        "background": "#0a0e14",
+                        "tertiary-fixed": "#c39fff",
+                        "error-dim": "#d73357",
+                        "on-primary": "#002679",
+                        "primary-fixed-dim": "#6b8dff",
+                        "on-secondary-fixed": "#00490b",
+                        "on-error-container": "#ffb2b9",
+                        "error": "#ff6e84",
+                        "surface-variant": "#20262f",
+                        "on-primary-container": "#001c5f",
+                        "inverse-primary": "#004fe7",
+                        "surface-bright": "#262c36",
+                        "surface": "#0a0e14",
+                        "inverse-on-surface": "#51555c",
+                        "on-error": "#490013",
+                        "tertiary-dim": "#8e4fee",
+                        "tertiary-fixed-dim": "#b88dff",
+                        "inverse-surface": "#f8f9ff",
+                        "surface-container-lowest": "#000000",
+                        "secondary": "#6bfd6a",
+                        "on-secondary-container": "#e6ffdc",
+                        "secondary-fixed-dim": "#5bee5e",
+                        "tertiary-container": "#9e60ff",
+                        "primary-dim": "#3067ff",
+                        "on-primary-fixed": "#000000",
+                        "primary": "#93aaff",
+                        "on-primary-fixed-variant": "#002474",
+                        "surface-container-low": "#0f141a",
+                        "on-tertiary": "#2d0062",
+                        "secondary-fixed": "#6bfd6a",
+                        "error-container": "#a70138",
+                        "surface-tint": "#93aaff",
+                        "on-secondary-fixed-variant": "#006914",
+                        "primary-container": "#7f9bff",
+                        "outline-variant": "#44484f",
+                        "surface-container-highest": "#20262f",
+                        "on-tertiary-container": "#000000",
+                        "tertiary": "#b486ff",
+                        "secondary-container": "#006e16",
+                        "on-tertiary-fixed-variant": "#4d00a0",
+                        "primary-fixed": "#7f9bff",
+                        "secondary-dim": "#5bee5e",
+                        "on-background": "#f1f3fc",
+                        "surface-dim": "#0a0e14",
+                        "outline": "#72757d",
+                        "on-surface": "#f1f3fc"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "fontFamily": {
+                        "headline": ["Space Grotesk", "sans-serif"],
+                        "body": ["Inter", "sans-serif"],
+                        "label": ["Inter", "sans-serif"]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+        .glass-panel {
+            background: rgba(21, 26, 33, 0.7);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(147, 170, 255, 0.1);
+        }
+        .glow-border-primary {
+            border: 1px solid transparent;
+            background-image: linear-gradient(#0a0e14, #0a0e14), linear-gradient(135deg, #93aaff 0%, transparent 100%);
+            background-origin: border-box;
+            background-clip: padding-box, border-box;
+        }
+        .data-pulse {
+            height: 2px;
+            background: linear-gradient(90deg, #6bfd6a, transparent);
+        }
+    </style>
+</head>
+<body class="bg-surface text-on-surface font-body selection:bg-primary/30 selection:text-primary-fixed overflow-x-hidden">
+<!-- TopAppBar -->
+<header class="bg-slate-950/80 backdrop-blur-lg docked full-width top-0 z-50 shadow-[0_8px_32px_rgba(0,0,0,0.5)] flex justify-between items-center w-full px-8 py-4 fixed border-b border-white/5">
+<div class="flex items-center gap-8">
+<div class="text-2xl font-black text-[#165DFF] tracking-tighter font-headline">数据结构可视化</div>
+<nav class="hidden md:flex gap-6">
+<a class="font-bold tracking-tight text-slate-400 hover:text-white transition-all duration-300 active:scale-95" href="#">首页</a>
+<a class="font-bold tracking-tight text-slate-400 hover:text-white transition-all duration-300 active:scale-95" href="#">学习路径</a>
+<a class="font-bold tracking-tight text-[#165DFF] border-b-2 border-[#165DFF] pb-1 transition-all duration-300 active:scale-95" href="#">专题练习</a>
+<a class="font-bold tracking-tight text-slate-400 hover:text-white transition-all duration-300 active:scale-95" href="#">文档说明</a>
+</nav>
+</div>
+<div class="flex items-center gap-4">
+<div class="relative group">
+<input class="bg-surface-container border-none focus:ring-1 focus:ring-primary rounded-full px-4 py-1.5 text-sm w-48 transition-all duration-300 focus:w-64" placeholder="搜索架构..." type="text"/>
+<span class="material-symbols-outlined absolute right-3 top-1.5 text-outline text-sm">search</span>
+</div>
+<button class="p-2 rounded-full hover:bg-blue-500/10 text-white transition-all duration-300">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<button class="p-2 rounded-full hover:bg-blue-500/10 text-white transition-all duration-300">
+<span class="material-symbols-outlined">settings</span>
+</button>
+</div>
+</header>
+<!-- SideNavBar -->
+<aside class="fixed left-0 top-0 h-full w-64 z-40 bg-slate-900/60 backdrop-blur-2xl shadow-[10px_0_30px_rgba(0,0,0,0.3)] flex flex-col py-20 px-4 space-y-6">
+<div class="px-2 mb-4">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-xl bg-primary-container flex items-center justify-center overflow-hidden">
+<img alt="用户头像" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDrdFBMNq13eCYIFQaMR2qNvr05GYzlYC8GsOnN7h5QZ1xILXedOynpyMpSbutsYhcc6NCckZlDIdUVUKrezSVSTZ-5lwaxS91UFRzv99oGW-ZY8YVspUSh-Za8yEQSd5vm2ok6kyFIfggjrF_LL7UHwlwGjLorJDplHY7Y4Do9rnMNTvbr47ousEYrW0l2_acFDpC-9Mr0fazCHkhOJ6U4uZBHOcvSffnVck4GrBXa9NxTss1MhvMyyAFcMNUlVopLBRBG1MNbwEp0"/>
+</div>
+<div>
+<h3 class="text-sm font-bold text-white font-headline">核心控制</h3>
+<p class="text-[10px] text-secondary">系统就绪</p>
+</div>
+</div>
+</div>
+<nav class="space-y-1">
+<a class="flex items-center gap-3 px-4 py-3 rounded-full bg-gradient-to-r from-blue-600/20 to-transparent text-[#165DFF] border-l-4 border-[#165DFF] transition-colors font-medium text-sm" href="#">
+<span class="material-symbols-outlined">model_training</span>
+            模拟模块
+        </a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-full text-slate-400 hover:text-slate-200 hover:bg-white/5 transition-colors font-medium text-sm" href="#">
+<span class="material-symbols-outlined">description</span>
+            开发文档
+        </a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-full text-slate-400 hover:text-slate-200 hover:bg-white/5 transition-colors font-medium text-sm" href="#">
+<span class="material-symbols-outlined">history</span>
+            历史记录
+        </a>
+</nav>
+</aside>
+<!-- Main Content Canvas -->
+<main class="ml-64 pt-24 min-h-screen px-8 pb-12 flex flex-col">
+<!-- Breadcrumbs & Header -->
+<div class="mb-8">
+<nav class="flex items-center gap-2 text-xs text-outline mb-2">
+<span>首页</span>
+<span class="material-symbols-outlined text-[12px]">chevron_right</span>
+<span>栈与队列</span>
+<span class="material-symbols-outlined text-[12px]">chevron_right</span>
+<span class="text-primary">银行排队</span>
+</nav>
+<h1 class="text-4xl font-headline font-black tracking-tight text-white flex items-center gap-4">
+            银行排队系统应用详情
+            <span class="bg-primary/20 text-primary text-xs font-bold px-3 py-1 rounded-full border border-primary/30 uppercase tracking-widest">仿真激活中</span>
+</h1>
+</div>
+<!-- Bento Grid Layout -->
+<div class="grid grid-cols-12 gap-6 flex-grow">
+<!-- Left Panel: Simulation Area (8 Cols) -->
+<div class="col-span-8 flex flex-col gap-6">
+<!-- Main Lobby Visualization -->
+<div class="glass-panel rounded-xl p-8 min-h-[480px] relative overflow-hidden">
+<div class="absolute top-0 left-0 w-full data-pulse"></div>
+<div class="flex justify-between items-center mb-12">
+<h2 class="font-headline font-bold text-xl text-white">数字化营业大厅</h2>
+<div class="flex gap-2">
+<span class="flex items-center gap-1.5 px-3 py-1 rounded-full bg-secondary/10 border border-secondary/20 text-secondary text-[10px] font-bold">
+<span class="w-2 h-2 rounded-full bg-secondary animate-pulse"></span>
+                            实时演算中
+                        </span>
+</div>
+</div>
+<!-- Counters -->
+<div class="grid grid-cols-5 gap-4 mb-20">
+<div class="flex flex-col items-center gap-4">
+<div class="w-full aspect-square glass-panel rounded-xl flex flex-col items-center justify-center gap-2 border-b-4 border-secondary shadow-[0_10px_20px_rgba(107,253,106,0.1)]">
+<span class="text-xs font-bold text-outline uppercase tracking-tighter">窗口 01</span>
+<span class="text-2xl font-headline font-black text-white">#042</span>
+<span class="text-[10px] text-secondary font-medium">办理中...</span>
+</div>
+<div class="w-8 h-8 rounded-full bg-surface-container-high border border-outline-variant flex items-center justify-center">
+<span class="material-symbols-outlined text-sm text-primary" style="font-variation-settings: 'FILL' 1;">person</span>
+</div>
+</div>
+<div class="flex flex-col items-center gap-4">
+<div class="w-full aspect-square glass-panel rounded-xl flex flex-col items-center justify-center gap-2 border-b-4 border-primary shadow-[0_10px_20px_rgba(147,170,255,0.1)] opacity-75">
+<span class="text-xs font-bold text-outline uppercase tracking-tighter">窗口 02</span>
+<span class="text-2xl font-headline font-black text-white">#043</span>
+<span class="text-[10px] text-primary font-medium">即将完成</span>
+</div>
+<div class="w-8 h-8 rounded-full bg-surface-container-high border border-outline-variant flex items-center justify-center">
+<span class="material-symbols-outlined text-sm text-primary" style="font-variation-settings: 'FILL' 1;">person</span>
+</div>
+</div>
+<div class="flex flex-col items-center gap-4">
+<div class="w-full aspect-square glass-panel rounded-xl flex flex-col items-center justify-center gap-2 border-b-4 border-outline-variant">
+<span class="text-xs font-bold text-outline uppercase tracking-tighter">窗口 03</span>
+<span class="text-2xl font-headline font-black text-outline">空闲</span>
+<span class="text-[10px] text-outline font-medium">等待中</span>
+</div>
+</div>
+<div class="flex flex-col items-center gap-4">
+<div class="w-full aspect-square glass-panel rounded-xl flex flex-col items-center justify-center gap-2 border-b-4 border-secondary shadow-[0_10px_20px_rgba(107,253,106,0.1)]">
+<span class="text-xs font-bold text-outline uppercase tracking-tighter">窗口 04</span>
+<span class="text-2xl font-headline font-black text-white">#041</span>
+<span class="text-[10px] text-secondary font-medium">办理中...</span>
+</div>
+<div class="w-8 h-8 rounded-full bg-surface-container-high border border-outline-variant flex items-center justify-center">
+<span class="material-symbols-outlined text-sm text-primary" style="font-variation-settings: 'FILL' 1;">person</span>
+</div>
+</div>
+<div class="flex flex-col items-center gap-4">
+<div class="w-full aspect-square glass-panel rounded-xl flex flex-col items-center justify-center gap-2 border-b-4 border-error shadow-[0_10px_20px_rgba(255,110,132,0.1)]">
+<span class="text-xs font-bold text-outline uppercase tracking-tighter">窗口 05</span>
+<span class="text-2xl font-headline font-black text-white">关闭</span>
+<span class="text-[10px] text-error font-medium">暂停服务</span>
+</div>
+</div>
+</div>
+<!-- Queue Line -->
+<div class="flex flex-col items-end gap-4">
+<div class="w-full h-px bg-gradient-to-r from-transparent via-outline-variant to-transparent opacity-30"></div>
+<div class="flex gap-4 items-center pr-12">
+<div class="flex gap-2">
+<div class="w-10 h-10 rounded-lg bg-surface-container-highest border border-primary/20 flex flex-col items-center justify-center">
+<span class="text-[10px] font-bold text-primary">#044</span>
+<span class="material-symbols-outlined text-lg text-white">person</span>
+</div>
+<div class="w-10 h-10 rounded-lg bg-surface-container-highest border border-primary/20 flex flex-col items-center justify-center">
+<span class="text-[10px] font-bold text-primary">#045</span>
+<span class="material-symbols-outlined text-lg text-white">person</span>
+</div>
+<div class="w-10 h-10 rounded-lg bg-surface-container-highest border border-primary/20 flex flex-col items-center justify-center">
+<span class="text-[10px] font-bold text-primary">#046</span>
+<span class="material-symbols-outlined text-lg text-white">person</span>
+</div>
+<div class="w-10 h-10 rounded-lg bg-surface-container-highest border border-white/5 flex flex-col items-center justify-center opacity-50">
+<span class="text-[10px] font-bold text-outline">#047</span>
+<span class="material-symbols-outlined text-lg text-outline">person</span>
+</div>
+</div>
+<div class="flex flex-col gap-1">
+<span class="text-[10px] font-black text-outline uppercase tracking-widest">排队队列</span>
+<div class="flex gap-1">
+<div class="w-1 h-1 rounded-full bg-primary"></div>
+<div class="w-1 h-1 rounded-full bg-primary/60"></div>
+<div class="w-1 h-1 rounded-full bg-primary/30"></div>
+</div>
+</div>
+</div>
+</div>
+<!-- Decorative elements -->
+<div class="absolute bottom-[-10%] right-[-10%] w-64 h-64 bg-primary/5 blur-[100px] rounded-full"></div>
+</div>
+<!-- Control Panel -->
+<div class="glass-panel rounded-xl p-6 grid grid-cols-2 gap-8">
+<div class="space-y-4">
+<h3 class="text-sm font-bold text-white flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-lg">settings_input_component</span>
+                        队列流控制
+                    </h3>
+<div class="flex flex-wrap gap-3">
+<button class="bg-gradient-to-br from-primary-dim to-primary text-on-primary px-5 py-2.5 rounded-lg text-sm font-bold flex items-center gap-2 hover:shadow-[0_0_15px_rgba(147,170,255,0.4)] transition-all active:scale-95">
+<span class="material-symbols-outlined text-sm">person_add</span>
+                            添加客户
+                        </button>
+<button class="bg-surface-container-highest border border-outline-variant text-white px-5 py-2.5 rounded-lg text-sm font-bold flex items-center gap-2 hover:bg-surface-bright transition-all active:scale-95">
+<span class="material-symbols-outlined text-sm">call_made</span>
+                            呼叫下一位
+                        </button>
+<button class="w-10 h-10 rounded-lg bg-surface-container-highest border border-outline-variant text-white flex items-center justify-center hover:text-primary transition-colors" title="自动播放">
+<span class="material-symbols-outlined">play_arrow</span>
+</button>
+<button class="w-10 h-10 rounded-lg bg-surface-container-highest border border-outline-variant text-white flex items-center justify-center hover:text-error transition-colors" title="跳过">
+<span class="material-symbols-outlined">skip_next</span>
+</button>
+</div>
+</div>
+<div class="space-y-4">
+<div class="flex justify-between items-center">
+<h3 class="text-sm font-bold text-white">仿真速率</h3>
+<span class="text-xs text-primary font-mono">1.5x</span>
+</div>
+<input class="w-full accent-primary h-1 bg-surface-container-highest rounded-lg appearance-none cursor-pointer" type="range"/>
+<div class="flex justify-between text-[10px] text-outline font-bold uppercase">
+<span>慢速</span>
+<span>正常</span>
+<span>快速</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Right Panel: Metrics & Code (4 Cols) -->
+<div class="col-span-4 flex flex-col gap-6">
+<!-- Real-time Metrics Card -->
+<div class="glass-panel rounded-xl p-6">
+<h3 class="font-headline font-bold text-lg text-white mb-6">实时分析指标</h3>
+<div class="space-y-6">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center">
+<span class="material-symbols-outlined text-primary text-lg">timer</span>
+</div>
+<div>
+<p class="text-[10px] text-outline font-bold uppercase">平均等待时间</p>
+<p class="text-xl font-headline font-bold text-white">14.2<span class="text-xs text-outline ml-1">分钟</span></p>
+</div>
+</div>
+<div class="text-secondary text-xs font-bold font-mono">↓ 2.4%</div>
+</div>
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-lg bg-secondary/10 flex items-center justify-center">
+<span class="material-symbols-outlined text-secondary text-lg">groups</span>
+</div>
+<div>
+<p class="text-[10px] text-outline font-bold uppercase">当前排队长度</p>
+<p class="text-xl font-headline font-bold text-white">08<span class="text-xs text-outline ml-1">人</span></p>
+</div>
+</div>
+<div class="text-primary text-xs font-bold font-mono">峰值: 15</div>
+</div>
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-lg bg-tertiary/10 flex items-center justify-center">
+<span class="material-symbols-outlined text-tertiary text-lg">fact_check</span>
+</div>
+<div>
+<p class="text-[10px] text-outline font-bold uppercase">窗口平均效率</p>
+<p class="text-xl font-headline font-bold text-white">88.5<span class="text-xs text-outline ml-1">%</span></p>
+</div>
+</div>
+</div>
+<!-- Mini Chart Placeholder -->
+<div class="h-16 w-full bg-surface-container-highest rounded-lg overflow-hidden flex items-end gap-1 px-1">
+<div class="bg-primary/40 w-full h-[40%] rounded-t-sm"></div>
+<div class="bg-primary/40 w-full h-[60%] rounded-t-sm"></div>
+<div class="bg-primary/40 w-full h-[30%] rounded-t-sm"></div>
+<div class="bg-primary/40 w-full h-[80%] rounded-t-sm"></div>
+<div class="bg-primary/60 w-full h-[50%] rounded-t-sm"></div>
+<div class="bg-primary/60 w-full h-[90%] rounded-t-sm"></div>
+<div class="bg-primary w-full h-[75%] rounded-t-sm"></div>
+</div>
+</div>
+</div>
+<!-- Code Sync Section -->
+<div class="glass-panel rounded-xl overflow-hidden flex flex-col flex-grow">
+<div class="bg-surface-container-lowest px-4 py-3 border-b border-outline-variant flex justify-between items-center">
+<div class="flex gap-4">
+<button class="text-xs font-bold text-primary border-b-2 border-primary pb-1">C++ 实现</button>
+<button class="text-xs font-bold text-outline hover:text-white transition-colors">Python 脚本</button>
+</div>
+<span class="material-symbols-outlined text-outline text-sm cursor-pointer hover:text-white transition-colors">content_copy</span>
+</div>
+<div class="p-4 bg-surface-container-lowest font-mono text-[12px] leading-relaxed flex-grow overflow-y-auto">
+<div class="text-outline-variant select-none opacity-50 mb-2">// Circular Queue for Banking System</div>
+<div class="flex gap-4">
+<span class="text-outline-variant text-right w-4">12</span>
+<code class="text-tertiary">class <span class="text-white">BankQueue</span> {</code>
+</div>
+<div class="flex gap-4">
+<span class="text-outline-variant text-right w-4">13</span>
+<code class="text-on-surface-variant ml-4">private:</code>
+</div>
+<div class="flex gap-4">
+<span class="text-outline-variant text-right w-4">14</span>
+<code class="text-primary-dim ml-8">int <span class="text-on-surface">front, rear, size;</span></code>
+</div>
+<div class="flex gap-4 bg-primary/20 -mx-4 px-4 border-l-2 border-primary">
+<span class="text-primary text-right w-4">15</span>
+<code class="text-on-surface-variant ml-4"><span class="text-primary-dim">bool</span> <span class="text-secondary">enqueue</span>(Customer c) {</code>
+</div>
+<div class="flex gap-4 bg-primary/10 -mx-4 px-4 border-l-2 border-primary/50">
+<span class="text-primary/70 text-right w-4">16</span>
+<code class="text-on-surface-variant ml-8">if (isFull()) <span class="text-tertiary">return false</span>;</code>
+</div>
+<div class="flex gap-4">
+<span class="text-outline-variant text-right w-4">17</span>
+<code class="text-on-surface-variant ml-8">rear = (rear + 1) % capacity;</code>
+</div>
+<div class="flex gap-4">
+<span class="text-outline-variant text-right w-4">18</span>
+<code class="text-on-surface-variant ml-8">data[rear] = c;</code>
+</div>
+<div class="flex gap-4">
+<span class="text-outline-variant text-right w-4">19</span>
+<code class="text-on-surface-variant ml-8">size++;</code>
+</div>
+<div class="flex gap-4">
+<span class="text-outline-variant text-right w-4">20</span>
+<code class="text-on-surface-variant ml-8"><span class="text-tertiary">return true</span>;</code>
+</div>
+<div class="flex gap-4">
+<span class="text-outline-variant text-right w-4">21</span>
+<code class="text-on-surface-variant ml-4">}</code>
+</div>
+<div class="flex gap-4">
+<span class="text-outline-variant text-right w-4">22</span>
+<code class="text-on-surface-variant">};</code>
+</div>
+</div>
+<div class="bg-surface-container-high p-4 flex items-center gap-3">
+<div class="w-2 h-2 rounded-full bg-secondary animate-pulse"></div>
+<p class="text-[10px] text-outline-variant font-medium">执行中: enqueue(#048) - 成功放入循环缓冲区</p>
+</div>
+</div>
+</div>
+</div>
+<!-- System Architecture Visualization (Bottom Section) -->
+<section class="mt-8 glass-panel rounded-xl p-8 relative overflow-hidden">
+<h3 class="font-headline font-bold text-xl text-white mb-8 flex items-center gap-3">
+<span class="material-symbols-outlined text-primary">account_tree</span>
+            底层逻辑架构图
+        </h3>
+<div class="grid grid-cols-4 gap-8">
+<div class="relative flex flex-col items-center gap-4 text-center">
+<div class="w-16 h-16 rounded-2xl glass-panel flex items-center justify-center border-t-2 border-primary shadow-[0_10px_30px_rgba(147,170,255,0.1)]">
+<span class="material-symbols-outlined text-3xl text-primary">input</span>
+</div>
+<div>
+<h4 class="text-sm font-bold text-white mb-1">生产者线程</h4>
+<p class="text-[10px] text-outline">模拟不间断的客户到达流</p>
+</div>
+<span class="material-symbols-outlined absolute right-[-20%] top-1/4 text-outline-variant opacity-30 text-4xl">arrow_forward</span>
+</div>
+<div class="relative flex flex-col items-center gap-4 text-center">
+<div class="w-16 h-16 rounded-2xl glass-panel flex items-center justify-center border-t-2 border-secondary shadow-[0_10px_30px_rgba(107,253,106,0.1)]">
+<span class="material-symbols-outlined text-3xl text-secondary">cached</span>
+</div>
+<div>
+<h4 class="text-sm font-bold text-white mb-1">循环队列缓冲区</h4>
+<p class="text-[10px] text-outline">内存高效的FIFO存储机制</p>
+</div>
+<span class="material-symbols-outlined absolute right-[-20%] top-1/4 text-outline-variant opacity-30 text-4xl">arrow_forward</span>
+</div>
+<div class="relative flex flex-col items-center gap-4 text-center">
+<div class="w-16 h-16 rounded-2xl glass-panel flex items-center justify-center border-t-2 border-tertiary shadow-[0_10px_30px_rgba(180,134,255,0.1)]">
+<span class="material-symbols-outlined text-3xl text-tertiary">dns</span>
+</div>
+<div>
+<h4 class="text-sm font-bold text-white mb-1">调度引擎</h4>
+<p class="text-[10px] text-outline">负责分配客户至空闲窗口</p>
+</div>
+<span class="material-symbols-outlined absolute right-[-20%] top-1/4 text-outline-variant opacity-30 text-4xl">arrow_forward</span>
+</div>
+<div class="flex flex-col items-center gap-4 text-center">
+<div class="w-16 h-16 rounded-2xl glass-panel flex items-center justify-center border-t-2 border-error shadow-[0_10px_30px_rgba(255,110,132,0.1)]">
+<span class="material-symbols-outlined text-3xl text-error">output</span>
+</div>
+<div>
+<h4 class="text-sm font-bold text-white mb-1">消费者终端</h4>
+<p class="text-[10px] text-outline">模拟多窗口并行处理能力</p>
+</div>
+</div>
+</div>
+<!-- Abstract background image -->
+<div class="absolute inset-0 z-[-1] opacity-20 pointer-events-none">
+<img alt="数据网络" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA46PRFx2hxtVgzG9z6Vx4hXmqx-kQen5Z849toGBvJN5bpvCwxmmMNKlnN_A556K1xzyCOXJGOy87a3-_V_6oWHfas0bn2X-yePQrLRLYmuC_IehGisoCsj2JqN81PrRFamc8QvxQfrc8BwLNABb_xnpq-FUjypgy5Ad7BEu6I4Qg4qwWBUQ7YDpWd-vX8QzjtuOKMd0LQrwbUWX9OT4d9iw4fpAtfUO8JeOl2ECrKxk0-b2arJIX38GNRoREgpcMGjbQLTWQ-FZVy"/>
+</div>
+</section>
+<!-- Footer -->
+<footer class="mt-8 w-full glass-panel rounded-xl p-6 flex flex-col md:flex-row justify-between items-center gap-4 relative overflow-hidden">
+<div class="flex items-center gap-2 relative z-10">
+<span class="material-symbols-outlined text-primary">data_object</span>
+<span class="font-bold text-white tracking-tight">数据结构可视化</span>
+</div>
+<div class="text-xs text-outline relative z-10">
+        © 2024 数据结构可视化团队. 保留所有权利.
+    </div>
+<div class="flex gap-6 text-xs font-medium text-outline relative z-10">
+<a class="hover:text-white transition-colors" href="#">关于我们</a>
+<a class="hover:text-white transition-colors" href="#">隐私协议</a>
+<a class="hover:text-white transition-colors" href="#">联系支持</a>
+</div>
+</footer>
+</main>
+<!-- Success Feedback Overlay -->
+<div class="fixed bottom-8 right-8 flex items-center gap-4 glass-panel px-6 py-3 rounded-full border-l-4 border-secondary shadow-2xl z-50">
+<span class="material-symbols-outlined text-secondary" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+<span class="text-sm font-bold text-white">系统正常运行：0% 丢包率</span>
+</div>
+</body></html>

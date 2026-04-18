@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="zh-CN"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>数据结构可视化 | 栈操作与括号匹配</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;family=Space+Grotesk:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "surface-container-highest": "#20262f",
+                      "primary-fixed": "#7f9bff",
+                      "tertiary": "#b486ff",
+                      "tertiary-fixed": "#c39fff",
+                      "secondary-fixed-dim": "#5bee5e",
+                      "on-surface-variant": "#a8abb3",
+                      "secondary-container": "#006e16",
+                      "outline": "#72757d",
+                      "inverse-on-surface": "#51555c",
+                      "surface-dim": "#0a0e14",
+                      "inverse-surface": "#f8f9ff",
+                      "secondary-dim": "#5bee5e",
+                      "surface-container-high": "#1b2028",
+                      "tertiary-fixed-dim": "#b88dff",
+                      "outline-variant": "#44484f",
+                      "on-primary-fixed": "#000000",
+                      "error-dim": "#d73357",
+                      "on-secondary-fixed-variant": "#006914",
+                      "secondary-fixed": "#6bfd6a",
+                      "surface-tint": "#93aaff",
+                      "surface": "#0a0e14",
+                      "on-background": "#f1f3fc",
+                      "secondary": "#6bfd6a",
+                      "on-secondary": "#005e11",
+                      "on-secondary-fixed": "#00490b",
+                      "surface-container-lowest": "#000000",
+                      "surface-bright": "#262c36",
+                      "on-surface": "#f1f3fc",
+                      "primary-dim": "#3067ff",
+                      "on-primary-container": "#001c5f",
+                      "primary-container": "#7f9bff",
+                      "on-error": "#490013",
+                      "tertiary-dim": "#8e4fee",
+                      "surface-container": "#151a21",
+                      "surface-container-low": "#0f141a",
+                      "tertiary-container": "#9e60ff",
+                      "on-tertiary-container": "#000000",
+                      "background": "#0a0e14",
+                      "on-tertiary": "#2d0062",
+                      "on-tertiary-fixed": "#23004e",
+                      "on-tertiary-fixed-variant": "#4d00a0",
+                      "error": "#ff6e84",
+                      "on-error-container": "#ffb2b9",
+                      "primary": "#93aaff",
+                      "inverse-primary": "#004fe7",
+                      "on-primary": "#002679",
+                      "on-secondary-container": "#e6ffdc",
+                      "error-container": "#a70138",
+                      "primary-fixed-dim": "#6b8dff",
+                      "surface-variant": "#20262f",
+                      "on-primary-fixed-variant": "#002474"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.125rem",
+                      "lg": "0.25rem",
+                      "xl": "0.5rem",
+                      "full": "0.75rem"
+              },
+              "fontFamily": {
+                      "headline": ["Space Grotesk"],
+                      "body": ["Inter"],
+                      "label": ["Inter"]
+              }
+            },
+          }
+        }
+    </script>
+<style>
+        .glass-card {
+            background: rgba(21, 26, 33, 0.7);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(147, 170, 255, 0.1);
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .data-glow {
+            box-shadow: 0 0 20px rgba(22, 93, 255, 0.15);
+        }
+    </style>
+</head>
+<body class="bg-surface text-on-surface font-body selection:bg-primary/30 flex flex-col min-h-screen">
+<!-- TopAppBar -->
+<header class="sticky top-0 w-full z-50 bg-[#0a0e14]/80 backdrop-blur-xl shadow-[0_8px_32px_0_rgba(22,93,255,0.08)] bg-gradient-to-b from-[#165DFF]/10 to-transparent h-20 flex justify-between items-center px-8 border-b border-white/5">
+<div class="flex items-center gap-8">
+<span class="text-2xl font-bold tracking-tighter text-[#165DFF] font-['Space_Grotesk']">数据结构可视化</span>
+<nav class="hidden md:flex items-center gap-6 h-full">
+<a class="text-slate-400 hover:text-slate-200 transition-colors font-['Inter'] text-sm h-20 flex items-center" href="#">首页</a>
+<a class="text-white font-medium transition-colors font-['Inter'] text-sm h-20 flex items-center border-b-2 border-primary" href="#">学习路径</a>
+<a class="text-slate-400 hover:text-slate-200 transition-colors font-['Inter'] text-sm h-20 flex items-center" href="#">专题练习</a>
+<a class="text-slate-400 hover:text-slate-200 transition-colors font-['Inter'] text-sm h-20 flex items-center" href="#">文档说明</a>
+</nav>
+</div>
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-on-surface-variant hover:bg-[#165DFF]/10 p-2 rounded-full cursor-pointer transition-all">contrast</span>
+<span class="material-symbols-outlined text-on-surface-variant hover:bg-[#165DFF]/10 p-2 rounded-full cursor-pointer transition-all">settings</span>
+<span class="material-symbols-outlined text-on-surface-variant hover:bg-[#165DFF]/10 p-2 rounded-full cursor-pointer transition-all">account_circle</span>
+</div>
+</header>
+<!-- Main Canvas -->
+<main class="flex-1 w-full max-w-7xl mx-auto p-8">
+<!-- Breadcrumbs -->
+<nav class="flex items-center gap-2 mb-8 text-xs font-label text-on-surface-variant">
+<span class="hover:text-primary cursor-pointer transition-colors">首页</span>
+<span class="material-symbols-outlined text-[14px]">chevron_right</span>
+<span class="hover:text-primary cursor-pointer transition-colors">栈与队列</span>
+<span class="material-symbols-outlined text-[14px]">chevron_right</span>
+<span class="text-on-surface">栈</span>
+</nav>
+<!-- Hero Section -->
+<div class="mb-12 relative overflow-hidden rounded-3xl p-12 bg-surface-container-low border border-white/5">
+<div class="absolute inset-0 opacity-10 pointer-events-none">
+<img class="w-full h-full object-cover grayscale" data-alt="abstract complex network of glowing lines and particles on a dark background representing neural pathways and data connectivity" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA-IEE327zCwkR5l7B2-Sh-LL9asTNZ6nYBbdqiQzTKfV00RMshqMVuidlCTUwS6OtDqeFcH0sEQZyzK_WELNLGYftoatBxXZvLt0SJ2L847PhHqKfKbs58XghFE2QgQhlZ_fZz4WbyzlVhAO64tCjPhMp3QbCkXPzTWwMe0J0hSUt-XxzCr30vvKotGwQy0V1h9ClPXWNlSQXNpGsIVtEW6lVbFpXb_zjpbxqZdtvY6OVTdRaV_Gbgy3dzJ9ayLkjrnapfNU66ZF0r"/>
+</div>
+<div class="relative z-10 max-w-2xl">
+<h1 class="text-5xl font-headline font-bold text-white mb-4 tracking-tighter">栈：后进先出 (LIFO) 逻辑</h1>
+<p class="text-on-surface-variant text-lg leading-relaxed">掌握后进先出 (LIFO) 协议。探索栈如何驱动递归、内存管理以及现代语法的解析过程。</p>
+</div>
+</div>
+<!-- Bento Grid Layout -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+<!-- Visual Stack Display -->
+<div class="lg:col-span-4 glass-card rounded-xl p-6 flex flex-col items-center">
+<div class="w-full flex justify-between items-center mb-6">
+<h2 class="font-headline text-lg font-bold text-white">实时内存</h2>
+<span class="text-[10px] uppercase tracking-widest text-primary-fixed bg-primary/10 px-2 py-1 rounded">LIFO 栈</span>
+</div>
+<div class="flex-1 w-full flex flex-col justify-end gap-2 px-8 min-h-[400px] border-x border-b border-white/5 rounded-b-xl pb-4">
+<!-- Stack Element -->
+<div class="w-full h-14 rounded-lg bg-surface-container-highest border border-white/10 flex items-center justify-between px-4 group hover:border-primary/50 transition-all">
+<span class="text-xs text-on-surface-variant font-mono">03</span>
+<span class="text-sm font-bold text-tertiary">字符 ']'</span>
+<span class="material-symbols-outlined text-xs text-on-surface-variant">keyboard_arrow_down</span>
+</div>
+<div class="w-full h-14 rounded-lg bg-surface-container-high border border-white/10 flex items-center justify-between px-4">
+<span class="text-xs text-on-surface-variant font-mono">02</span>
+<span class="text-sm font-bold text-secondary">字符 '}'</span>
+<span class="material-symbols-outlined text-xs text-on-surface-variant">keyboard_arrow_down</span>
+</div>
+<div class="w-full h-14 rounded-lg bg-surface-container border border-white/10 flex items-center justify-between px-4">
+<span class="text-xs text-on-surface-variant font-mono">01</span>
+<span class="text-sm font-bold text-primary">字符 '('</span>
+<span class="material-symbols-outlined text-xs text-on-surface-variant">keyboard_arrow_down</span>
+</div>
+<!-- Empty Slots -->
+<div class="w-full h-14 rounded-lg border border-dashed border-white/5 flex items-center justify-center">
+<span class="text-[10px] text-white/10 font-label">栈底 (STACK_BASE)</span>
+</div>
+</div>
+<div class="grid grid-cols-2 gap-4 w-full mt-6">
+<button class="py-3 bg-surface-container-highest hover:bg-primary-dim text-white text-xs font-bold rounded-lg transition-all flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-sm">add_box</span> 入栈 (PUSH)
+                        </button>
+<button class="py-3 bg-surface-container-highest hover:bg-error-dim text-white text-xs font-bold rounded-lg transition-all flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-sm">output</span> 出栈 (POP)
+                        </button>
+</div>
+</div>
+<!-- Application: Bracket Matching -->
+<div class="lg:col-span-8 flex flex-col gap-6">
+<div class="glass-card rounded-xl p-8 relative overflow-hidden">
+<div class="absolute top-0 right-0 p-4 opacity-10">
+<span class="material-symbols-outlined text-8xl">code_blocks</span>
+</div>
+<div class="relative z-10">
+<div class="flex items-center gap-3 mb-6">
+<div class="w-2 h-2 rounded-full bg-secondary animate-pulse"></div>
+<h2 class="font-headline text-2xl font-bold text-white tracking-tight">括号匹配应用实例</h2>
+</div>
+<div class="mb-8">
+<label class="block text-xs font-label text-on-surface-variant mb-3 uppercase tracking-tighter">待评估表达式</label>
+<div class="flex gap-4">
+<input class="flex-1 bg-surface-container-lowest border border-white/10 rounded-xl px-6 py-4 text-primary text-xl font-mono focus:ring-1 focus:ring-primary focus:border-primary outline-none transition-all" placeholder="输入表达式..." type="text" value="{[()]} ( )"/>
+<button class="bg-primary hover:bg-primary-fixed text-on-primary-fixed font-bold px-8 rounded-xl transition-all flex items-center gap-2 whitespace-nowrap">
+<span class="material-symbols-outlined">play_arrow</span> 运行追踪
+                                    </button>
+</div>
+</div>
+<!-- Real-time Logic -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+<div class="space-y-4">
+<h3 class="text-xs font-label text-on-surface-variant uppercase tracking-widest">逻辑流</h3>
+<div class="space-y-2">
+<div class="flex items-center justify-between p-3 rounded-lg bg-surface-container-high border-l-2 border-primary">
+<span class="text-xs font-mono text-white">扫描字符: '{'</span>
+<span class="text-[10px] text-primary bg-primary/10 px-2 py-0.5 rounded">入栈中</span>
+</div>
+<div class="flex items-center justify-between p-3 rounded-lg bg-surface-container-high border-l-2 border-secondary">
+<span class="text-xs font-mono text-white">扫描字符: '['</span>
+<span class="text-[10px] text-secondary bg-secondary/10 px-2 py-0.5 rounded">入栈中</span>
+</div>
+<div class="flex items-center justify-between p-3 rounded-lg bg-surface-container-high border-l-2 border-tertiary">
+<span class="text-xs font-mono text-white">扫描字符: ')'</span>
+<span class="text-[10px] text-tertiary bg-tertiary/10 px-2 py-0.5 rounded">匹配并出栈</span>
+</div>
+</div>
+</div>
+<div class="space-y-4">
+<h3 class="text-xs font-label text-on-surface-variant uppercase tracking-widest">当前状态</h3>
+<div class="h-full flex flex-col items-center justify-center p-6 rounded-xl border border-white/5 bg-gradient-to-br from-secondary/5 to-transparent">
+<span class="material-symbols-outlined text-5xl text-secondary mb-2" data-weight="fill">check_circle</span>
+<span class="text-lg font-headline font-bold text-white">表达式合法</span>
+<p class="text-xs text-on-surface-variant text-center mt-2">所有括号对均已成功匹配并从栈中弹出。</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Code Highlighting Section -->
+<div class="bg-surface-container-lowest rounded-xl p-1 overflow-hidden border border-white/5">
+<div class="flex items-center justify-between px-6 py-3 border-b border-white/5">
+<span class="text-[10px] font-mono text-on-surface-variant">bracket_matcher.py</span>
+<div class="flex gap-1.5">
+<div class="w-2.5 h-2.5 rounded-full bg-error/20"></div>
+<div class="w-2.5 h-2.5 rounded-full bg-accent_orange/20"></div>
+<div class="w-2.5 h-2.5 rounded-full bg-secondary/20"></div>
+</div>
+</div>
+<div class="p-6 font-mono text-sm leading-relaxed overflow-x-auto">
+<div class="flex gap-6">
+<div class="text-on-surface-variant/30 select-none text-right">01<br/>02<br/>03<br/>04<br/>05<br/>06<br/>07</div>
+<pre class="text-white"><span class="text-tertiary">def</span> <span class="text-primary">is_balanced</span>(expr):
+    stack = [] <span class="text-on-surface-variant/50"># 初始化栈</span>
+    <span class="text-tertiary">for</span> char <span class="text-tertiary">in</span> expr:
+        <span class="text-tertiary">if</span> char <span class="text-tertiary">in</span> <span class="text-secondary">"{[("</span>:
+            <span class="bg-primary/20 rounded px-1">stack.append(char)</span> <span class="text-on-surface-variant/50"># 左括号入栈</span>
+        <span class="text-tertiary">elif</span> char <span class="text-tertiary">in</span> <span class="text-secondary">"}]}"</span>:
+            <span class="text-tertiary">if</span> <span class="text-tertiary">not</span> stack: <span class="text-tertiary">return</span> <span class="text-secondary">False</span> <span class="text-on-surface-variant/50"># 无匹配项</span></pre>
+</div>
+</div>
+</div>
+</div>
+<!-- Performance & Use Cases -->
+<div class="lg:col-span-12 grid grid-cols-1 md:grid-cols-3 gap-6 mt-6">
+<div class="glass-card rounded-xl p-6 border-t-2 border-primary">
+<div class="flex items-center gap-3 mb-4">
+<span class="material-symbols-outlined text-primary">history</span>
+<h4 class="font-headline font-bold text-white">浏览器历史记录</h4>
+</div>
+<p class="text-sm text-on-surface-variant leading-relaxed">栈是“后退”按钮背后的核心结构。每次访问 URL 时，它都会被压入导航栈中。</p>
+</div>
+<div class="glass-card rounded-xl p-6 border-t-2 border-secondary">
+<div class="flex items-center gap-3 mb-4">
+<span class="material-symbols-outlined text-secondary">account_tree</span>
+<h4 class="font-headline font-bold text-white">递归控制</h4>
+</div>
+<p class="text-sm text-on-surface-variant leading-relaxed">调用栈管理函数的执行上下文，处理深度调用层次结构中的变量作用域和返回地址。</p>
+</div>
+<div class="glass-card rounded-xl p-6 border-t-2 border-tertiary">
+<div class="flex items-center gap-3 mb-4">
+<span class="material-symbols-outlined text-tertiary">speed</span>
+<h4 class="font-headline font-bold text-white">性能指标</h4>
+</div>
+<div class="space-y-3">
+<div class="flex justify-between items-center text-xs">
+<span class="text-on-surface-variant">入栈 (Push) 操作</span>
+<span class="text-secondary font-mono">O(1)</span>
+</div>
+<div class="flex justify-between items-center text-xs">
+<span class="text-on-surface-variant">出栈 (Pop) 操作</span>
+<span class="text-secondary font-mono">O(1)</span>
+</div>
+<div class="w-full bg-white/5 h-1 rounded-full mt-2 overflow-hidden">
+<div class="bg-primary h-full w-full"></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Unified Glassmorphism Footer -->
+<footer class="w-full border-t border-white/5 bg-surface/50 backdrop-blur-xl mt-auto">
+<div class="max-w-7xl mx-auto px-8 py-8 flex flex-col md:flex-row justify-between items-center gap-4">
+<div class="flex items-center gap-2">
+<span class="text-lg font-bold tracking-tighter text-[#165DFF] font-['Space_Grotesk']">数据结构可视化</span>
+<span class="text-sm text-on-surface-variant ml-4">© 2024 保留所有权利</span>
+</div>
+<div class="flex items-center gap-6 text-sm text-on-surface-variant">
+<a class="hover:text-white transition-colors" href="#">服务条款</a>
+<a class="hover:text-white transition-colors" href="#">隐私政策</a>
+<a class="hover:text-white transition-colors" href="#">联系我们</a>
+</div>
+</div>
+</footer>
+<!-- Background Decoration -->
+<div class="fixed inset-0 pointer-events-none -z-10 overflow-hidden">
+<div class="absolute -top-[20%] -left-[10%] w-[50%] h-[50%] rounded-full bg-primary/5 blur-[120px]"></div>
+<div class="absolute -bottom-[20%] -right-[10%] w-[50%] h-[50%] rounded-full bg-tertiary/5 blur-[120px]"></div>
+</div>
+</body></html>

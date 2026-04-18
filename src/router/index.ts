@@ -1,17 +1,19 @@
-import { createRouter, createWebHistory } from 'vue-router'
+import { createRouter, createWebHashHistory } from 'vue-router'
 import StitchFrameView from '../views/StitchFrameView.vue'
 
+const withBase = (path: string) => `${import.meta.env.BASE_URL}${path.replace(/^\/+/, '')}`
+
 const stitchPageByRoute = {
-  home: '/stitch/home.html',
-  stack: '/stitch/stack.html',
-  student: '/stitch/student.html',
-  josephus: '/stitch/josephus.html',
-  expression: '/stitch/expression.html',
-  bracket: '/stitch/bracket.html',
-  bst: '/stitch/bst.html',
-  bank: '/stitch/bank.html',
-  shortest: '/stitch/shortest.html',
-  hanoi: '/stitch/hanoi.html',
+  home: withBase('stitch/home.html'),
+  stack: withBase('stitch/stack.html'),
+  student: withBase('stitch/student.html'),
+  josephus: withBase('stitch/josephus.html'),
+  expression: withBase('stitch/expression.html'),
+  bracket: withBase('stitch/bracket.html'),
+  bst: withBase('stitch/bst.html'),
+  bank: withBase('stitch/bank.html'),
+  shortest: withBase('stitch/shortest.html'),
+  hanoi: withBase('stitch/hanoi.html'),
 } as const
 
 const frame = (src: string) => ({
@@ -20,7 +22,7 @@ const frame = (src: string) => ({
 })
 
 const router = createRouter({
-  history: createWebHistory(),
+  history: createWebHashHistory(import.meta.env.BASE_URL),
   routes: [
     { path: '/', name: 'home', ...frame(stitchPageByRoute.home) },
     { path: '/learning-path', name: 'learning-path', ...frame(stitchPageByRoute.home) },

@@ -4,6 +4,7 @@ import { useRoute } from 'vue-router'
 
 const props = defineProps<{ src: string }>()
 const route = useRoute()
+const enhancerSrc = `${import.meta.env.BASE_URL}stitch/enhance.js`
 
 const frameRef = ref<HTMLIFrameElement | null>(null)
 const frameKey = computed(() => `${route.fullPath}:${props.src}`)
@@ -24,7 +25,7 @@ const injectEnhancer = () => {
 
   if (!doc.querySelector('script[data-codex-stitch-enhancer="true"]')) {
     const script = doc.createElement('script')
-    script.src = '/stitch/enhance.js'
+    script.src = enhancerSrc
     script.defer = true
     script.setAttribute('data-codex-stitch-enhancer', 'true')
     doc.head.appendChild(script)

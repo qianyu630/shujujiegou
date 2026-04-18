@@ -55,6 +55,36 @@
     'hanoi.html': '/topic/integrated',
   }
 
+  const getTopLocation = () => {
+    try {
+      return window.top?.location ?? window.location
+    } catch {
+      return window.location
+    }
+  }
+
+  const getCurrentRoutePath = () => {
+    const locationRef = getTopLocation()
+    const hash = locationRef.hash || ''
+
+    if (hash.startsWith('#/')) {
+      return hash.slice(1)
+    }
+
+    return routeForCurrentPage[pageName] || locationRef.pathname || '/'
+  }
+
+  const buildAppUrl = (routePath) => {
+    const locationRef = getTopLocation()
+    const normalizedRoute = routePath.startsWith('/') ? routePath : `/${routePath}`
+    const pathname = locationRef.pathname || '/'
+    const basePath = pathname.includes('/stitch/')
+      ? `${pathname.split('/stitch/')[0]}/`
+      : pathname
+
+    return `${locationRef.origin}${basePath}#${normalizedRoute}`
+  }
+
   const clean = (text) => text.replace(/\s+/g, ' ').trim()
 
   const toRoute = (text) => {
@@ -70,12 +100,18 @@
   }
 
   const navigateTop = (href) => {
-    if (!href || window.top === window) {
-      window.location.href = href
+    if (!href) {
       return
     }
 
-    window.top.location.href = href
+    const targetUrl = buildAppUrl(href)
+
+    if (window.top === window) {
+      window.location.href = targetUrl
+      return
+    }
+
+    window.top.location.href = targetUrl
   }
 
   const wireLinkLikeNode = (node, href) => {
@@ -126,7 +162,7 @@
   }
 
   const markActiveNav = () => {
-    const currentPath = window.top?.location?.pathname || routeForCurrentPage[pageName] || '/'
+    const currentPath = getCurrentRoutePath()
     const navNodes = Array.from(document.querySelectorAll('nav a, header a'))
 
     for (const node of navNodes) {

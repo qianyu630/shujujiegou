@@ -114,10 +114,19 @@
     window.top.location.href = targetUrl
   }
 
+  const setTopHref = (node, href) => {
+    if (!node || node.tagName !== 'A' || !href) {
+      return
+    }
+
+    node.dataset.codexRoute = href
+    node.setAttribute('href', buildAppUrl(href))
+    node.setAttribute('target', '_top')
+  }
+
   const wireLinkLikeNode = (node, href) => {
     if (node.tagName === 'A') {
-      node.setAttribute('href', href)
-      node.setAttribute('target', '_top')
+      setTopHref(node, href)
       return
     }
 
@@ -166,10 +175,10 @@
     const navNodes = Array.from(document.querySelectorAll('nav a, header a'))
 
     for (const node of navNodes) {
-      const href = node.getAttribute('href')
-      if (!href || href === '#') continue
+      const routePath = node.dataset.codexRoute || node.getAttribute('href')
+      if (!routePath || routePath === '#') continue
 
-      const active = href === currentPath
+      const active = routePath === currentPath
       if (!active) continue
 
       node.style.color = '#165DFF'
@@ -279,7 +288,7 @@
       return
     }
 
-    const topPath = window.top?.location?.pathname || '/'
+    const topPath = getCurrentRoutePath()
     const headingTargets = {
       '/learning-path': ['学习路径', '核心架构单元'],
       '/practice': ['继续探索', '核心架构单元'],
@@ -298,8 +307,7 @@
     const footerLinks = Array.from(document.querySelectorAll('footer a'))
     for (const node of footerLinks) {
       if ((node.getAttribute('href') || '#') !== '#') continue
-      node.setAttribute('href', '/docs')
-      node.setAttribute('target', '_top')
+      setTopHref(node, '/docs')
     }
   }
 
@@ -314,9 +322,7 @@
     const topNavTargets = ['/', '/learning-path', '/practice', '/docs']
     topNavLinks.forEach((node, index) => {
       const href = topNavTargets[index]
-      if (!href) return
-      node.setAttribute('href', href)
-      node.setAttribute('target', '_top')
+      setTopHref(node, href)
     })
 
     const breadcrumb = document.querySelector('main > nav')
@@ -776,19 +782,15 @@
     const topNavTargets = ['/', '/learning-path', '/practice', '/docs']
     topNavLinks.forEach((node, index) => {
       const href = topNavTargets[index]
-      if (!href) return
-      node.setAttribute('href', href)
-      node.setAttribute('target', '_top')
+      setTopHref(node, href)
     })
 
     const breadcrumbLinks = Array.from(document.querySelectorAll('main > div a'))
     if (breadcrumbLinks[0]) {
-      breadcrumbLinks[0].setAttribute('href', '/')
-      breadcrumbLinks[0].setAttribute('target', '_top')
+      setTopHref(breadcrumbLinks[0], '/')
     }
     if (breadcrumbLinks[1]) {
-      breadcrumbLinks[1].setAttribute('href', '/topic/linear')
-      breadcrumbLinks[1].setAttribute('target', '_top')
+      setTopHref(breadcrumbLinks[1], '/topic/linear')
     }
 
     const gridRoot = document.querySelector('.p-8.grid.grid-cols-12.gap-8')
@@ -1447,9 +1449,7 @@
     const topNavTargets = ['/', '/learning-path', '/practice', '/docs']
     topNavLinks.forEach((node, index) => {
       const href = topNavTargets[index]
-      if (!href) return
-      node.setAttribute('href', href)
-      node.setAttribute('target', '_top')
+      setTopHref(node, href)
     })
 
     const breadcrumb = document.querySelector('main section nav')
@@ -1988,19 +1988,15 @@
     const topNavTargets = ['/', '/learning-path', '/practice', '/docs']
     topNavLinks.forEach((node, index) => {
       const href = topNavTargets[index]
-      if (!href) return
-      node.setAttribute('href', href)
-      node.setAttribute('target', '_top')
+      setTopHref(node, href)
     })
 
     const breadcrumbLinks = Array.from(document.querySelectorAll('nav[aria-label="Breadcrumb"] a'))
     if (breadcrumbLinks[0]) {
-      breadcrumbLinks[0].setAttribute('href', '/')
-      breadcrumbLinks[0].setAttribute('target', '_top')
+      setTopHref(breadcrumbLinks[0], '/')
     }
     if (breadcrumbLinks[1]) {
-      breadcrumbLinks[1].setAttribute('href', '/topic/integrated')
-      breadcrumbLinks[1].setAttribute('target', '_top')
+      setTopHref(breadcrumbLinks[1], '/topic/integrated')
     }
 
     const mainGrid = document.querySelector('main .grid.grid-cols-12.gap-8')

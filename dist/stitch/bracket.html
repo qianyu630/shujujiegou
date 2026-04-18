@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="zh-CN"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;family=Space+Grotesk:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "tertiary-container": "#9e60ff",
+                    "background": "#0a0e14",
+                    "inverse-surface": "#f8f9ff",
+                    "surface-container-low": "#0f141a",
+                    "surface-tint": "#93aaff",
+                    "inverse-on-surface": "#51555c",
+                    "primary-fixed": "#7f9bff",
+                    "primary-fixed-dim": "#6b8dff",
+                    "on-secondary-fixed": "#00490b",
+                    "tertiary-dim": "#8e4fee",
+                    "surface-variant": "#20262f",
+                    "on-background": "#f1f3fc",
+                    "tertiary-fixed": "#c39fff",
+                    "surface-container": "#151a21",
+                    "on-surface-variant": "#a8abb3",
+                    "on-tertiary-fixed": "#23004e",
+                    "error-dim": "#d73357",
+                    "primary-container": "#7f9bff",
+                    "on-primary": "#002679",
+                    "secondary-fixed-dim": "#5bee5e",
+                    "surface-container-highest": "#20262f",
+                    "primary-dim": "#3067ff",
+                    "secondary-container": "#006e16",
+                    "surface-container-lowest": "#000000",
+                    "secondary-fixed": "#6bfd6a",
+                    "inverse-primary": "#004fe7",
+                    "secondary": "#6bfd6a",
+                    "secondary-dim": "#5bee5e",
+                    "tertiary-fixed-dim": "#b88dff",
+                    "surface-container-high": "#1b2028",
+                    "error-container": "#a70138",
+                    "outline": "#72757d",
+                    "on-secondary-container": "#e6ffdc",
+                    "tertiary": "#b486ff",
+                    "on-secondary": "#005e11",
+                    "primary": "#93aaff",
+                    "on-primary-container": "#001c5f",
+                    "outline-variant": "#44484f",
+                    "on-primary-fixed": "#000000",
+                    "surface-dim": "#0a0e14",
+                    "on-secondary-fixed-variant": "#006914",
+                    "on-error-container": "#ffb2b9",
+                    "on-error": "#490013",
+                    "on-tertiary-container": "#000000",
+                    "on-surface": "#f1f3fc",
+                    "on-tertiary-fixed-variant": "#4d00a0",
+                    "error": "#ff6e84",
+                    "on-tertiary": "#2d0062",
+                    "surface-bright": "#262c36",
+                    "on-primary-fixed-variant": "#002474",
+                    "surface": "#0a0e14"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "0.75rem"
+            },
+            "fontFamily": {
+                    "headline": ["Space Grotesk"],
+                    "body": ["Inter"],
+                    "label": ["Inter"]
+            }
+          }
+        }
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .glass-panel {
+            background: rgba(21, 26, 33, 0.7);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(147, 170, 255, 0.1);
+        }
+        .stack-item {
+            transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+        .neural-bg {
+            background-image: radial-gradient(circle at 2px 2px, rgba(147, 170, 255, 0.05) 1px, transparent 0);
+            background-size: 32px 32px;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-surface font-body neural-bg min-h-screen flex flex-col">
+<!-- TopAppBar -->
+<header class="fixed top-0 w-full h-16 z-50 bg-[#0a0e14]/80 backdrop-blur-xl shadow-[0_4px_30px_rgba(0,0,0,0.5)] flex justify-between items-center px-8">
+<div class="flex items-center gap-8">
+<div class="text-2xl font-black text-[#165DFF] uppercase tracking-widest font-['Space_Grotesk']">数据结构可视化</div>
+<nav class="hidden md:flex gap-6 items-center">
+<a class="font-['Space_Grotesk'] tracking-tight text-sm text-slate-400 hover:text-slate-100 transition-all" href="#">首页</a>
+<a class="font-['Space_Grotesk'] tracking-tight text-sm text-slate-400 hover:text-slate-100 transition-all" href="#">学习路径</a>
+<a class="font-['Space_Grotesk'] tracking-tight text-sm text-[#165DFF] border-b-2 border-[#165DFF] pb-1 transition-all" href="#">专题练习</a>
+<a class="font-['Space_Grotesk'] tracking-tight text-sm text-slate-400 hover:text-slate-100 transition-all" href="#">文档说明</a>
+</nav>
+</div>
+<div class="flex items-center gap-4">
+<button class="p-2 text-slate-400 hover:bg-white/5 transition-all rounded-lg active:scale-95">
+<span class="material-symbols-outlined">terminal</span>
+</button>
+<button class="p-2 text-slate-400 hover:bg-white/5 transition-all rounded-lg active:scale-95">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<div class="w-8 h-8 rounded-full overflow-hidden border border-[#165DFF]/30">
+<img alt="User profile" class="w-full h-full object-cover" data-alt="Cyberpunk style user avatar with neon accents and futuristic clothing" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAPHHXkrpvWhNObjjCjNWqqwt241gx0IFu97HekeN9iPV2uhPiIXs-NKQ0kFOdLCmZD4IUIngF8RSPHhMB1hB06uRgHBYeOPprPzy5HJIHJIgzG05AqrXV8RK4wqUBDl7hxSA3a319uGQXkJ4bwSPy7-0xLuSi6QvT5CPyqiJ0gSnj6SomBUJ1X5ummY_vxmlateFJhPRU-36QuUa2cYe0ZljMDPtl_L_0OFfSrGu9IkCLyHntG_ve-7UcoeeBuGp4D2OcI5Li_CGR0"/>
+</div>
+</div>
+<div class="bg-gradient-to-r from-[#165DFF]/20 to-transparent h-[1px] absolute bottom-0 w-full"></div>
+</header>
+<!-- SideNavBar -->
+<aside class="fixed left-0 top-16 h-[calc(100vh-64px)] w-64 z-40 bg-[#0a0e14]/60 backdrop-blur-2xl shadow-[20px_0_40px_rgba(0,0,0,0.3)] flex flex-col py-6">
+<div class="px-6 mb-8">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-xl bg-primary-dim/20 flex items-center justify-center">
+<span class="material-symbols-outlined text-[#165DFF]" style="font-variation-settings: 'FILL' 1;">account_tree</span>
+</div>
+<div>
+<div class="text-[#165DFF] font-['Space_Grotesk'] font-bold text-sm">核心引擎</div>
+<div class="text-[10px] text-slate-500 uppercase tracking-widest">Neural v2.4</div>
+</div>
+</div>
+</div>
+<nav class="flex-1 px-2">
+<div class="text-[10px] text-slate-600 font-bold px-4 mb-2 uppercase tracking-widest">导航系统</div>
+<a class="flex items-center gap-3 bg-gradient-to-r from-[#165DFF]/20 to-transparent text-[#165DFF] border-l-4 border-[#165DFF] py-3 px-4 font-['Inter'] text-sm font-medium hover:translate-x-1 transition-transform duration-300" href="#">
+<span class="material-symbols-outlined text-sm">account_tree</span>
+                数据结构
+            </a>
+<a class="flex items-center gap-3 text-slate-500 py-3 px-4 hover:text-slate-200 hover:bg-[#165DFF]/5 transition-all duration-300 font-['Inter'] text-sm font-medium hover:translate-x-1 transition-transform" href="#">
+<span class="material-symbols-outlined text-sm">analytics</span>
+                算法
+            </a>
+<a class="flex items-center gap-3 text-slate-500 py-3 px-4 hover:text-slate-200 hover:bg-[#165DFF]/5 transition-all duration-300 font-['Inter'] text-sm font-medium hover:translate-x-1 transition-transform" href="#">
+<span class="material-symbols-outlined text-sm">code</span>
+                代码同步
+            </a>
+<a class="flex items-center gap-3 text-slate-500 py-3 px-4 hover:text-slate-200 hover:bg-[#165DFF]/5 transition-all duration-300 font-['Inter'] text-sm font-medium hover:translate-x-1 transition-transform" href="#">
+<span class="material-symbols-outlined text-sm">speed</span>
+                性能分析
+            </a>
+</nav>
+<div class="px-4 mt-auto">
+<button class="w-full py-3 bg-primary-dim hover:bg-primary transition-all rounded-lg text-on-primary font-bold text-sm shadow-[0_0_20px_rgba(22,93,255,0.3)]">
+                开启新模拟
+            </button>
+<div class="mt-6 flex flex-col gap-1">
+<a class="flex items-center gap-3 text-slate-500 py-2 px-4 hover:text-slate-200 text-xs transition-all" href="#">
+<span class="material-symbols-outlined text-xs">help</span>
+                    技术文档
+                </a>
+</div>
+</div>
+<div class="bg-gradient-to-b from-[#165DFF]/10 to-transparent w-[1px] absolute right-0 h-full"></div>
+</aside>
+<!-- Main Content Canvas -->
+<main class="ml-64 mt-16 p-8 flex-1 flex flex-col">
+<!-- Header Section -->
+<header class="mb-10">
+<div class="text-xs text-slate-500 mb-4 font-['Space_Grotesk'] flex items-center gap-2">
+<a class="hover:text-primary transition-colors" href="#">首页</a>
+<span class="text-slate-700">/</span>
+<a class="hover:text-primary transition-colors" href="#">栈与队列</a>
+<span class="text-slate-700">/</span>
+<span class="text-slate-300 font-medium">括号匹配</span>
+</div>
+<div class="flex items-center gap-2 mb-2">
+<span class="px-2 py-0.5 rounded text-[10px] font-bold bg-primary/10 text-primary uppercase tracking-tighter">栈模块</span>
+<span class="h-[1px] w-12 bg-outline-variant"></span>
+<span class="text-[10px] text-slate-500 font-medium">LIFO 协议 v1.0.4</span>
+</div>
+<h1 class="font-headline text-5xl font-extrabold text-on-surface tracking-tighter mb-4">
+                括号匹配：<span class="text-primary">栈应用实践</span>
+</h1>
+<p class="text-on-surface-variant max-w-2xl leading-relaxed">
+                探索表达式解析的核心机制。利用后进先出（LIFO）原理实时验证嵌套结构的合法性。
+            </p>
+</header>
+<!-- Bento Grid Layout -->
+<div class="grid grid-cols-12 gap-6 flex-1">
+<!-- Left Column: Interaction & Stack -->
+<div class="col-span-12 lg:col-span-7 flex flex-col gap-6">
+<!-- Interaction Zone -->
+<section class="glass-panel rounded-xl p-6 relative overflow-hidden group">
+<div class="absolute top-0 left-0 w-full h-[2px] bg-gradient-to-r from-secondary to-transparent"></div>
+<div class="flex justify-between items-center mb-6">
+<label class="text-xs font-bold uppercase tracking-widest text-slate-400">输入表达式 INPUT EXPRESSION</label>
+<div class="flex gap-2">
+<span class="w-2 h-2 rounded-full bg-secondary animate-pulse"></span>
+<span class="text-[10px] font-mono text-secondary uppercase">运行中 ACTIVE</span>
+</div>
+</div>
+<div class="relative mb-8">
+<input class="w-full bg-surface-container-lowest border-none text-2xl font-mono text-primary p-6 rounded-lg focus:ring-1 focus:ring-primary-dim transition-all tracking-[0.5em]" placeholder="在此输入括号序列..." type="text" value="{ [ ( ) ] }"/>
+<div class="absolute -bottom-2 left-1/2 -translate-x-1/2 flex gap-4">
+<!-- Visual Pointer -->
+<div class="flex flex-col items-center">
+<span class="material-symbols-outlined text-primary text-xl translate-y-[-4px]">arrow_drop_up</span>
+<span class="text-[10px] font-bold text-primary-fixed-dim uppercase">指针 POINTER</span>
+</div>
+</div>
+</div>
+<div class="flex gap-4 items-center">
+<button class="px-6 py-2 bg-primary-dim hover:bg-primary text-white rounded text-sm font-bold flex items-center gap-2 transition-all"><span class="material-symbols-outlined text-sm">play_arrow</span> 运行模拟 RUN SIMULATION</button>
+<button class="px-6 py-2 border border-outline-variant hover:bg-surface-variant text-on-surface-variant rounded text-sm font-bold flex items-center gap-2 transition-all"><span class="material-symbols-outlined text-sm">step_over</span> 单步执行 STEP</button>
+<button class="ml-auto p-2 text-slate-500 hover:text-white">
+<span class="material-symbols-outlined">restart_alt</span>
+</button>
+</div>
+</section>
+<!-- Vertical Stack Visualizer -->
+<section class="glass-panel rounded-xl p-8 flex flex-col items-center min-h-[400px]">
+<div class="text-center mb-10">
+<h3 class="font-headline text-lg font-bold text-primary mb-1">数据栈 DATA STACK</h3>
+<p class="text-xs text-slate-500 font-mono">内存地址 MEMORY_ADDRESS: 0x4F22B</p>
+</div>
+<div class="relative w-48 h-64 border-x-4 border-b-4 border-primary/20 rounded-b-xl flex flex-col-reverse items-center justify-start p-2 gap-2 overflow-visible">
+<!-- Bottom of stack -->
+<div class="stack-item w-full h-12 bg-surface-container-highest rounded-lg flex items-center justify-center border border-primary/30 shadow-[0_0_15px_rgba(147,170,255,0.1)] group">
+<span class="text-primary font-mono text-xl font-bold">{</span>
+<div class="absolute -right-16 text-[10px] text-slate-500 opacity-0 group-hover:opacity-100 transition-opacity">索引 0</div>
+</div>
+<div class="stack-item w-full h-12 bg-surface-container-highest rounded-lg flex items-center justify-center border border-primary/30 shadow-[0_0_15px_rgba(147,170,255,0.1)] group">
+<span class="text-primary font-mono text-xl font-bold">[</span>
+<div class="absolute -right-16 text-[10px] text-slate-500 opacity-0 group-hover:opacity-100 transition-opacity">索引 1</div>
+</div>
+<div class="stack-item w-full h-12 bg-primary-dim rounded-lg flex items-center justify-center shadow-[0_0_30px_rgba(22,93,255,0.4)] relative">
+<span class="text-white font-mono text-xl font-bold">(</span>
+<div class="absolute -top-12 flex flex-col items-center">
+<span class="text-[10px] font-black text-secondary tracking-widest mb-1 uppercase">栈顶 TOP</span>
+<span class="material-symbols-outlined text-secondary animate-bounce text-sm">arrow_downward</span>
+</div>
+</div>
+<!-- Empty space/Ghost items -->
+<div class="w-full h-12 border-2 border-dashed border-slate-800 rounded-lg"></div>
+</div>
+<div class="mt-12 grid grid-cols-3 gap-8 w-full max-w-md">
+<div class="text-center">
+<div class="text-2xl font-headline font-bold text-on-surface">3</div>
+<div class="text-[10px] text-slate-500 uppercase tracking-widest">栈大小 STACK SIZE</div>
+</div>
+<div class="text-center">
+<div class="text-2xl font-headline font-bold text-secondary">合法 VALID</div>
+<div class="text-[10px] text-slate-500 uppercase tracking-widest">当前状态 CURRENT STATE</div>
+</div>
+<div class="text-center">
+<div class="text-2xl font-headline font-bold text-on-surface">0.4ms</div>
+<div class="text-[10px] text-slate-500 uppercase tracking-widest">延迟 LATENCIES</div>
+</div>
+</div>
+</section>
+</div>
+<!-- Right Column: Logic & Code -->
+<div class="col-span-12 lg:col-span-5 flex flex-col gap-6">
+<!-- Logic Stream / Logs -->
+<section class="glass-panel rounded-xl flex flex-col h-[300px]">
+<div class="p-4 border-b border-outline-variant flex justify-between items-center bg-surface-container-low/50">
+<span class="text-xs font-bold tracking-widest">逻辑流 LOGIC_STREAM</span>
+<span class="text-[10px] font-mono text-slate-500">实时输出 LIVE_OUTPUT</span>
+</div>
+<div class="flex-1 overflow-y-auto p-4 font-mono text-[11px] space-y-3">
+<div class="flex gap-3 text-slate-400">
+<span class="text-slate-600">[0.001s]</span>
+<span>初始化空栈 INITIALIZE EMPTY STACK</span>
+</div>
+<div class="flex gap-3 text-secondary">
+<span class="text-slate-600">[0.042s]</span>
+<span class="font-bold">入栈 PUSHING:</span>
+<span>字符 '{' 到地址 0x01</span>
+</div>
+<div class="flex gap-3 text-secondary">
+<span class="text-slate-600">[0.089s]</span>
+<span class="font-bold">入栈 PUSHING:</span>
+<span>字符 '[' 到地址 0x02</span>
+</div>
+<div class="flex gap-3 text-secondary">
+<span class="text-slate-600">[0.125s]</span>
+<span class="font-bold">入栈 PUSHING:</span>
+<span>字符 '(' 到地址 0x03</span>
+</div>
+<div class="flex gap-3 text-tertiary">
+<span class="text-slate-600">[0.211s]</span>
+<span class="font-bold">匹配并出栈 MATCH &amp; POP:</span>
+<span>字符 ')' 匹配 '('</span>
+</div>
+<div class="flex gap-3 text-slate-500 animate-pulse">
+<span class="text-slate-600">[0.245s]</span>
+<span class="italic">等待下一个字符 WAITING FOR NEXT TOKEN...</span>
+</div>
+</div>
+</section>
+<!-- Python Code Panel -->
+<section class="bg-surface-container-lowest rounded-xl flex flex-col border border-primary/20 shadow-2xl flex-1 min-h-[400px]">
+<div class="p-4 flex items-center justify-between border-b border-white/5">
+<div class="flex gap-2">
+<div class="w-3 h-3 rounded-full bg-error-dim/40"></div>
+<div class="w-3 h-3 rounded-full bg-accent_orange/40"></div>
+<div class="w-3 h-3 rounded-full bg-secondary-dim/40"></div>
+</div>
+<span class="text-[10px] font-mono text-slate-500">bracket_matcher.py</span>
+</div>
+<div class="p-6 font-mono text-sm leading-relaxed overflow-x-auto">
+<div class="flex gap-4">
+<span class="text-slate-700 w-4 select-none">1</span>
+<span class="text-tertiary">def</span> <span class="text-primary">is_balanced</span>(expression):
+                        </div>
+<div class="flex gap-4">
+<span class="text-slate-700 w-4 select-none">2</span>
+                                stack = []
+                        </div>
+<div class="flex gap-4">
+<span class="text-slate-700 w-4 select-none">3</span>
+                                mapping = {<span class="text-secondary">')'</span>: <span class="text-secondary">'('</span>, <span class="text-secondary">']'</span>: <span class="text-secondary">'['</span>, <span class="text-secondary">'}'</span>: <span class="text-secondary">'{'</span>}
+                        </div>
+<div class="flex gap-4 bg-primary/10 border-l-2 border-primary">
+<span class="text-slate-700 w-4 select-none">4</span>
+                                <span class="text-tertiary">for</span> char <span class="text-tertiary">in</span> expression:
+                        </div>
+<div class="flex gap-4">
+<span class="text-slate-700 w-4 select-none">5</span>
+                                    <span class="text-tertiary">if</span> char <span class="text-tertiary">in</span> mapping.values():
+                        </div>
+<div class="flex gap-4">
+<span class="text-slate-700 w-4 select-none">6</span>
+                                        stack.append(char)
+                        </div>
+<div class="flex gap-4">
+<span class="text-slate-700 w-4 select-none">7</span>
+                                    <span class="text-tertiary">elif</span> char <span class="text-tertiary">in</span> mapping.keys():
+                        </div>
+<div class="flex gap-4">
+<span class="text-slate-700 w-4 select-none">8</span>
+                                        <span class="text-tertiary">if</span> <span class="text-tertiary">not</span> stack <span class="text-tertiary">or</span> mapping[char] != stack.pop():
+                        </div>
+<div class="flex gap-4">
+<span class="text-slate-700 w-4 select-none">9</span>
+                                            <span class="text-tertiary">return</span> <span class="text-primary">False</span>
+</div>
+<div class="flex gap-4">
+<span class="text-slate-700 w-4 select-none">10</span>
+                                <span class="text-tertiary">return</span> <span class="text-tertiary">not</span> stack
+                        </div>
+</div>
+<div class="mt-auto p-4 bg-surface-container-low text-[10px] text-slate-500 border-t border-white/5 flex justify-between">
+<span>UTF-8</span>
+<span>Python 3.10.2</span>
+</div>
+</section>
+</div>
+</div>
+<!-- Resources Section (Bottom Asymmetric) -->
+<section class="mt-12 grid grid-cols-1 md:grid-cols-3 gap-6">
+<div class="glass-panel p-6 rounded-xl hover:bg-white/5 transition-all cursor-pointer group">
+<span class="material-symbols-outlined text-primary mb-4 block">library_books</span>
+<h4 class="font-bold mb-2">复杂度分析 Complexity Analysis</h4>
+<p class="text-xs text-slate-400">深入解析基于栈的括号匹配算法的时间复杂度 O(n) 与空间复杂度 O(n)。</p>
+<div class="mt-4 flex items-center text-[10px] text-primary font-bold opacity-0 group-hover:opacity-100 transition-opacity">阅读更多 READ MORE <span class="material-symbols-outlined text-xs ml-1">chevron_right</span></div>
+</div>
+<div class="glass-panel p-6 rounded-xl hover:bg-white/5 transition-all cursor-pointer group">
+<span class="material-symbols-outlined text-secondary mb-4 block">speed</span>
+<h4 class="font-bold mb-2">边界情况处理 Edge Case Handling</h4>
+<p class="text-xs text-slate-400">探讨无括号字符串、类型不匹配以及深度嵌套限制等异常情况的处理方案。</p>
+<div class="mt-4 flex items-center text-[10px] text-secondary font-bold opacity-0 group-hover:opacity-100 transition-opacity">阅读更多 READ MORE <span class="material-symbols-outlined text-xs ml-1">chevron_right</span></div>
+</div>
+<div class="glass-panel p-6 rounded-xl bg-gradient-to-br from-primary-dim/10 to-transparent border-primary/20">
+<div class="flex items-center gap-4 mb-4">
+<img alt="Doc Icon" class="w-10 h-10" data-alt="Stylized glowing blue document icon with digital circuit patterns" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA-MWZs1MTigNK7ajdKzrP5d4QwcgnyzNRgsJoH56BmlLwvr07YW5z8yoPP8cQTPsT0fkATnK6XnEIQ7c00iRuzQqs3V4FKpkEUVOHnGpm2tPqWAqAKc9zByZN0B7skTZYQAlJK8eU-WNkN_hliD3Dz0SbNitiIcy3-n9FIrEKzC_uNejd_nyTDJiRI6enZ5Kyfb0n_6KgZW8hWK1B8W2h_lywt263jwqPWc_yWrbex0AGqeVXXUzt6Ln23wf9n_wWWAQRMExUKXnHQ"/>
+<div>
+<h4 class="font-bold text-sm">下载实验报告 Download Lab Report</h4>
+<p class="text-[10px] text-slate-500">PDF - 2.4 MB</p>
+</div>
+</div>
+<button class="w-full py-2 bg-white/5 hover:bg-white/10 rounded text-xs font-bold transition-all">获取文档 GET DOCUMENT</button>
+</div>
+</section>
+<!-- Unified Glassmorphism Footer -->
+<footer class="mt-16 glass-panel rounded-xl p-8 border-t border-primary/20 flex flex-col md:flex-row justify-between items-center gap-6">
+<div class="flex items-center gap-4">
+<div class="text-xl font-black text-[#165DFF] font-['Space_Grotesk']">数据结构可视化</div>
+<div class="h-6 w-[1px] bg-slate-700"></div>
+<div class="text-xs text-slate-500 font-mono">Neural Engine v2.4</div>
+</div>
+<div class="flex gap-6 text-sm text-slate-400">
+<a class="hover:text-white transition-colors" href="#">隐私政策</a>
+<a class="hover:text-white transition-colors" href="#">服务条款</a>
+<a class="hover:text-white transition-colors" href="#">联系我们</a>
+</div>
+<div class="text-xs text-slate-600">
+        © 2024 数据结构可视化团队. All rights reserved.
+    </div>
+</footer>
+</main>
+<!-- Visual Background Element (Neural Network Style) -->
+<div class="fixed inset-0 -z-10 pointer-events-none overflow-hidden opacity-20">
+<svg class="absolute w-full h-full" xmlns="http://www.w3.org/2000/svg">
+<defs>
+<lineargradient id="lineGrad" x1="0%" x2="100%" y1="0%" y2="100%">
+<stop offset="0%" style="stop-color:#165DFF;stop-opacity:0.2"></stop>
+<stop offset="100%" style="stop-color:transparent;stop-opacity:0"></stop>
+</lineargradient>
+</defs>
+<circle cx="20%" cy="30%" fill="#165DFF" r="2"></circle>
+<circle cx="60%" cy="20%" fill="#165DFF" r="2"></circle>
+<circle cx="80%" cy="50%" fill="#165DFF" r="2"></circle>
+<circle cx="40%" cy="80%" fill="#165DFF" r="2"></circle>
+<line stroke="url(#lineGrad)" stroke-width="0.5" x1="20%" x2="60%" y1="30%" y2="20%"></line>
+<line stroke="url(#lineGrad)" stroke-width="0.5" x1="60%" x2="80%" y1="20%" y2="50%"></line>
+<line stroke="url(#lineGrad)" stroke-width="0.5" x1="80%" x2="40%" y1="50%" y2="80%"></line>
+<line stroke="url(#lineGrad)" stroke-width="0.5" x1="40%" x2="20%" y1="80%" y2="30%"></line>
+</svg>
+</div>
+</body></html>
